@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-
     /**
      * View all users
      *
@@ -36,35 +35,6 @@ class AdminController extends Controller
         $adminResource = AdminResource::collection($admins); // use AdminResource to format the response and return it as a JSON collection
         return response()->json([
             'admins' => $adminResource
-        ], 200);
-    }
-
-    /**
-     * View all instructors
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function viewAllInstructors()
-    {
-        $instructors = User::role('instructor')->get();
-        $instructorResource = InstructorResource::collection($instructors); // use InstructorResource to format the response and return it as a JSON collection
-        return response()->json([
-            'instructors' => $instructorResource
-        ], 200);
-    }
-
-    /**
-     * View all students
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function viewAllStudents()
-    {
-        $students = User::role('student')->get();
-        $studentResource = StudentResource::collection($students);
-
-        return response()->json([
-            'students' => $studentResource
         ], 200);
     }
 }
