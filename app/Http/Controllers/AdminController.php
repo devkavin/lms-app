@@ -3,36 +3,68 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ViewInstructorsRequest;
+use App\Http\Resources\AdminResource;
 use App\Http\Resources\InstructorResource;
+use App\Http\Resources\StudentResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function viewAllUsers(Request $request)
+
+    /**
+     * View all users
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function viewAllUsers()
     {
         return response()->json([
             'users' => User::all()
         ], 200);
     }
 
-
-
-    public function viewAllInstructors()
+    /**
+     * View all admins
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function viewAllAdmins()
     {
-        $instructors = User::role('instructor')->get();
-        $instructorsResource = InstructorResource::collection($instructors); // use InstructorResource to format the response and return it as a JSON collection
+        $admins = User::role('admin')->get();
+        $adminResource = AdminResource::collection($admins); // use AdminResource to format the response and return it as a JSON collection
         return response()->json([
-            'instructors' => $instructorsResource
+            'admins' => $adminResource
         ], 200);
     }
 
-    public function viewAllStudents(Request $request)
+    /**
+     * View all instructors
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function viewAllInstructors()
+    {
+        $instructors = User::role('instructor')->get();
+        $instructorResource = InstructorResource::collection($instructors); // use InstructorResource to format the response and return it as a JSON collection
+        return response()->json([
+            'instructors' => $instructorResource
+        ], 200);
+    }
+
+    /**
+     * View all students
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function viewAllStudents()
     {
         $students = User::role('student')->get();
-        $instructorsResource = InstructorResource::collection($students);
+        $studentResource = StudentResource::collection($students);
+
         return response()->json([
-            'students' => $students
+            'students' => $studentResource
         ], 200);
     }
 }
