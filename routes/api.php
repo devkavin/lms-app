@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
@@ -18,6 +19,9 @@ Route::post('/v1/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/v1/user', [AuthController::class, 'user']);
     Route::post('/v1/logout', [AuthController::class, 'logout']);
+
+    // Admin
+    Route::get('/v1/admin/instructors', [AdminController::class, 'viewAllInstructors']);
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index']);
