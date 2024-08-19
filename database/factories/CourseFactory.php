@@ -20,7 +20,7 @@ class CourseFactory extends Factory
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(4),
             'category' => $this->faker->randomElement(['programming', 'web_design', 'photography', 'language']),
-            'instructor_id' => 1,
+            'instructor_id' => $this->faker->numberBetween(2, 3),
         ];
     }
 }

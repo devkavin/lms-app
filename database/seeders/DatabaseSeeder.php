@@ -16,16 +16,11 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
         $this->call(PermissionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CourseSeeder::class);
 
         // use CourseFactory
-        Course::factory(3)->create();
+        Course::factory(5)->create();
     }
 }

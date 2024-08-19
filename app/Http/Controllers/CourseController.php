@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CourseResource;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
@@ -11,15 +12,17 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::all();
+        $coursesResource = CourseResource::collection($courses); // use CourseResource to format the response and return it as a JSON collection
 
         return response()->json([
-            'courses' => $courses
+            'courses' => $coursesResource
         ], 200);
     }
 
     public function show($id)
     {
         $course = Course::find($id);
+        $coursesResource = new CourseResource($course); // use CourseResource to format the response and return it as a JSON object
 
         if (!$course) {
             return response()->json([
@@ -28,7 +31,7 @@ class CourseController extends Controller
         }
 
         return response()->json([
-            'course' => $course
+            'course' => $coursesResource
         ], 200);
     }
 

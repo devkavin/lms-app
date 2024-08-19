@@ -24,9 +24,19 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('password'), // password is 'password'
             ],
             [
+                'name' => 'Instructor Mary',
+                'email' => 'instructormary@gmail.com',
+                'password' => bcrypt('password'), // password is 'password'
+            ],
+            [
                 'name' => 'Student John',
                 'email' => 'studentjohn@gmail.com',
                 'password' => bcrypt('password'), // password is 'password'
+            ],
+            [
+                'name' => 'Student Jane',
+                'email' => 'studentjane@gmail.com',
+                'password' => bcrypt('password'),
             ],
         ];
 
@@ -40,7 +50,13 @@ class UserSeeder extends Seeder
         $instructor = \App\Models\User::where('email', 'instructorjames@gmail.com')->first();
         $instructor->assignRole('instructor');
 
+        $instructor = \App\Models\User::where('email', 'instructormary@gmail.com')->first();
+        $instructor->assignRole('instructor');
+
         $student = \App\Models\User::where('email', 'studentjohn@gmail.com')->first();
+        $student->assignRole('student');
+
+        $student = \App\Models\User::where('email', 'studentjane@gmail.com')->first();
         $student->assignRole('student');
     }
 }

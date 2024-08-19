@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StudentResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -64,12 +66,10 @@ class AuthController extends Controller
     public function user()
     {
         $user = Auth::user();
+        $userResource = new UserResource($user);
 
         return response()->json([
-            'user' => Auth::user(),
-            // 'role' => $user->getRoleNames(),
-            // 'created_courses' => $user->createdCourses,
-            // 'enrolled_courses' => $user->enrolledCourses,
+            'user' => $userResource,
         ], 200);
     }
 }

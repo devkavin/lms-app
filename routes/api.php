@@ -21,7 +21,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/v1/logout', [AuthController::class, 'logout']);
 
     // Admin
+
+    Route::get('/v1/admin/users', [AdminController::class, 'viewAllUsers']);
     Route::get('/v1/admin/instructors', [AdminController::class, 'viewAllInstructors']);
+    Route::get('/v1/admin/students', [AdminController::class, 'viewAllStudents']);
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index']);

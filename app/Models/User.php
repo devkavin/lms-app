@@ -47,6 +47,15 @@ class User extends Authenticatable
         ];
     }
 
+    public function getInstructors(): array
+    {
+        $users = User::all();
+        $instructors = $users->filter(function ($users) {
+            return $users->hasRole('instructor');
+        });
+        return $instructors->toArray();
+    }
+
     public function createdCourses()
     {
         return $this->hasMany(Course::class, 'instructor_id');
@@ -70,18 +79,18 @@ class User extends Authenticatable
         return $this->enrolledCourses()->detach($course);
     }
 
-    public function toArray()
-    {
-        $array = parent::toArray();
+    // public function toArray()
+    // {
+    //     $array = parent::toArray();
 
-        // Add custom attributes to the array
-        $array['role'] = $this->getRoleNames();
-        // Only include created courses if the user is an instructor
-        if ($this->hasRole('instructor')) {
-            $array['created_courses'] = $this->createdCourses;
-        }
-        $array['enrolled_courses'] = $this->enrolledCourses;
+    //     // Add custom attributes to the array
+    //     $array['role'] = $this->getRoleNames();
+    //     // Only include created courses if the user is an instructor
+    //     if ($this->hasRole('instructor')) {
+    //         $array['created_courses'] = $this->createdCourses;
+    //     }
+    //     $array['enrolled_courses'] = $this->enrolledCourses;
 
-        return $array;
-    }
+    //     return $array;
+    // }
 }
