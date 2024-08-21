@@ -21,8 +21,7 @@ class AuthController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $user = User::create($data);
-        $user->assignRole($data['role']);
+        $user = User::create($data)->assignRole($data['role']); // with one db query, create and assign role to user
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
