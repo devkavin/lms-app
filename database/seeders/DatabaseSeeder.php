@@ -22,5 +22,14 @@ class DatabaseSeeder extends Seeder
 
         // use CourseFactory
         Course::factory(5)->create();
+        User::factory(50)->create()->each(function ($user) {
+            // assign student role
+            $user->assignRole('student');
+        });
+
+        // enroll students to courses
+        $course = Course::where('id', 1)->first();
+        $students = User::role('student')->get();
+        $course->students()->attach($students);
     }
 }
