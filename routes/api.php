@@ -15,17 +15,19 @@ use Illuminate\Support\Facades\Route;
 Route::post('/v1/register', [AuthController::class, 'register']);
 Route::post('/v1/login', [AuthController::class, 'login']);
 
+// admin
+Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
+    Route::get('/v1/admin/users', [AdminController::class, 'viewAllUsers']);
+    Route::get('/v1/admin/instructors', [AdminController::class, 'viewAllInstructors']);
+    Route::get('/v1/admin/admins', [AdminController::class, 'viewAllAdmins']);
+    Route::delete('/v1/admin/user', [AdminController::class, 'deleteUser']);
+    Route::delete('/v1/admin/bulk_delete_users', [AdminController::class, 'bulkDeleteUsers']);
+});
+
 // protected
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/v1/user', [AuthController::class, 'user']);
     Route::post('/v1/logout', [AuthController::class, 'logout']);
-
-    // Admin
-
-    Route::get('/v1/admin/users', [AdminController::class, 'viewAllUsers']);
-    Route::get('/v1/admin/admins', [AdminController::class, 'viewAllAdmins']);
-    Route::get('/v1/admin/instructors', [AdminController::class, 'viewAllInstructors']);
-    Route::get('/v1/admin/students', [AdminController::class, 'viewAllStudents']);
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index']);
@@ -37,7 +39,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/courses/{id}/enroll', [CourseController::class, 'enroll']); // update course
     Route::put('/courses/{id}/unenroll', [CourseController::class, 'unenroll']); // update course
     Route::get('/courses/{id}/is_enrolled', [CourseController::class, 'isEnrolled']); // update course
-
-
 
 });
