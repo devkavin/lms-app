@@ -14,24 +14,28 @@ class CourseSeeder extends Seeder
     {
         $courses = [
             [
+                'course_code' => 'AA00',
                 'instructor_id' => 2,
                 'title' => 'Learn Laravel',
                 'description' => 'Learn Laravel from scratch',
                 'category' => 'PHP',
             ],
             [
+                'course_code' => 'AA01',
                 'instructor_id' => 2,
                 'title' => 'Learn Vue.js',
                 'description' => 'Learn Vuejs from scratch',
                 'category' => 'JavaScript',
             ],
             [
+                'course_code' => 'AA02',
                 'instructor_id' => 2,
                 'title' => 'Learn React',
                 'description' => 'Learn React from scratch',
                 'category' => 'JavaScript',
             ],
             [
+                'course_code' => 'AA03',
                 'instructor_id' => 2,
                 'title' => 'Learn Python',
                 'description' => 'Learn Python from scratch',

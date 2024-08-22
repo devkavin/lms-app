@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('instructor_id')->unsigned();
             $table->foreign('instructor_id')->references('id')->on('users');
+            $table->string('course_code')->unique();
             $table->string('title');
             $table->text('description');
             $table->string('category');

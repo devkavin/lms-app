@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
+            'course_code' => $this->faker->unique()->regexify('[A-Z]{2}[0-9]{2}'),
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(4),
             'category' => $this->faker->randomElement(['programming', 'web_design', 'photography', 'language']),
