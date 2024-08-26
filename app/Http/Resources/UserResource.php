@@ -14,25 +14,21 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($this->hasRole('admin')) {
-            return [AdminResource::make($this)];
-        }
 
-        if ($this->hasRole('instructor')) {
-            return [InstructorResource::make($this)];
-        }
+        $response = match ($this->getRoleNames()->first()) {
+            'admin' => AdminResource::make($this)->resolve(), // resolve() method is used to get the data from the resource and not the resource itself
+            'instructor' => InstructorResource::make($this)->resolve(),
+            'student' => StudentResource::make($this)->resolve(),
+            default => [
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'role' => $this->getRoleNames(),
+                'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            ],
+        };
 
-        if ($this->hasRole('student')) {
-            return [StudentResource::make($this)];
-        }
-
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->getRoleNames(),
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-        ];
+        return  $response;
     }
 }
