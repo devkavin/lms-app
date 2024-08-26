@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Helpers\APIHelper;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -67,8 +68,10 @@ class AuthController extends Controller
         $user = Auth::user();
         $userResource = new UserResource($user);
 
-        return response()->json([
-            'user' => $userResource,
-        ], 200);
+        // return response()->json([
+        //     'user' => $userResource,
+        // ], 200);
+
+        return APIHelper::makeApiResponse(true, 'User retrieved successfully', $userResource, 200);
     }
 }
