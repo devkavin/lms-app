@@ -23,7 +23,7 @@ class CoursePolicy
      */
     public function view(User $user, Course $course): Response
     {
-        return $user->hasPermissionTo('courses_view') && $course->students->contains($user)
+        return $user->hasPermissionTo('courses_view')
             ? Response::allow()
             : Response::deny('You do not have permission to view this course');
     }
