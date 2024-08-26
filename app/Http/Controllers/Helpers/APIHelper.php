@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class APIHelper extends Controller
 {
+    const HTTP_CODE_SUCCESS             = 200;
+    const HTTP_CODE_CREATED             = 201; // for successful creation requests
+    const HTTP_NO_DATA_FOUND            = 204; // for no content, Delete, save and continue, etc
+    const HTTP_CODE_BAD_REQUEST         = 400;
+    const HTTP_CODE_UNAUTHORIZED        = 401; // lacks valid authentication credentials
+    const HTTP_CODE_FORBIDDEN           = 403; // lacks permission for the request
+    const HTTP_CODE_NOT_FOUND           = 404; // the requested resource could not be found
+    const HTTP_CODE_CONFLICT            = 409; // the request could not be completed due to a conflict with the current state of the target resource
+    const HTTP_CODE_SERVER_ERROR        = 500;
+
+
     /**
      * Summary of makeApiResponse
      * @param mixed $status
@@ -17,7 +28,7 @@ class APIHelper extends Controller
      * @param mixed $status_code
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function makeApiResponse($status = true, $message = 'Success', $data = null, $status_code = 200): JsonResponse
+    public static function makeApiResponse($status = true, $message = 'Success', $data = null, $status_code = self::HTTP_CODE_SUCCESS): JsonResponse
     {
         // set the response
         $response = [
@@ -53,7 +64,7 @@ class APIHelper extends Controller
         // Only get full request object when creating
         // Ignore when doing the update
         if ($type == 'insert') {
-            // Remove unnecessary feilds from request
+            // Remove unnecessary fields from request
             $input = $request->only($schema_keys);
         }
 
