@@ -15,6 +15,12 @@ use Illuminate\Validation\ValidationException;
 
 class CourseController extends Controller
 {
+    /**
+     * Summary of index
+     * @return \Illuminate\Http\JsonResponse
+     * @throws AuthorizationException If the user is not authorized to view courses.
+     * @throws \Exception If an error occurs while retrieving the courses.
+     */
     public function index(): JsonResponse
     {
         try {
@@ -32,6 +38,14 @@ class CourseController extends Controller
         }
     }
 
+    /**
+     * Summary of show
+     * @param mixed $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ModelNotFoundException If the course is not found.
+     * @throws AuthorizationException If the user is not authorized to view the course.
+     * @throws \Exception If an error occurs while retrieving the course.
+     */
     public function show($id): JsonResponse
     {
         try {
@@ -55,6 +69,14 @@ class CourseController extends Controller
         }
     }
 
+    /**
+     * Summary of store
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws AuthorizationException If the user is not authorized to create a course.
+     * @throws ValidationException If the request data is invalid.
+     * @throws \Exception If an error occurs while creating the course.
+     */
     public function store(Request $request): JsonResponse
     {
         try {
@@ -62,10 +84,10 @@ class CourseController extends Controller
             Gate::authorize('create', Course::class); // check if user has permission to create a course
 
             $validation_schema = [
-                'course_code' => 'required|unique:courses,course_code',
-                'title' => 'required|string',
-                'description' => 'required|string',
-                'category' => 'required|string',
+                'course_code'   => 'required|unique:courses,course_code',
+                'title'         => 'required|string',
+                'description'   => 'required|string',
+                'category'      => 'required|string',
             ];
 
             $validator = APIHelper::validateRequest($validation_schema, $request);
@@ -76,10 +98,10 @@ class CourseController extends Controller
             // dd($validator);
 
             $course = Course::create([
-                'course_code' => $request->course_code,
-                'title' => $request->title,
-                'description' => $request->description,
-                'category' => $request->category,
+                'course_code'   => $request->course_code,
+                'title'         => $request->title,
+                'description'   => $request->description,
+                'category'      => $request->category,
                 'instructor_id' => $user->id,
             ]);
 
@@ -118,9 +140,9 @@ class CourseController extends Controller
             Gate::authorize('update', $course);
 
             $validation_schema = [
-                'title' => 'required|string',
-                'description' => 'required|string',
-                'category' => 'required|string',
+                'title'         => 'required|string',
+                'description'   => 'required|string',
+                'category'      => 'required|string',
             ];
 
             $validator = APIHelper::validateRequest($validation_schema, $request);
