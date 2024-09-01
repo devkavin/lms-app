@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 // public
 Route::post('/v1/register', [AuthController::class, 'register']);
 Route::post('/v1/login', [AuthController::class, 'login']);
+Route::post('/v1/logout', [AuthController::class, 'logout']);
 
 // admin
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
@@ -27,17 +28,21 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
 // protected
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/v1/user', [AuthController::class, 'user']);
-    Route::post('/v1/logout', [AuthController::class, 'logout']);
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index']);
-    Route::post('/courses', [CourseController::class, 'store']);
     Route::get('/courses/{id}', [CourseController::class, 'show']);
-    Route::put('/courses/{id}', [CourseController::class, 'update']); // update course
-    Route::delete('/courses/{id}', [CourseController::class, 'destroy']); // delete course
 
-    Route::put('/courses/{id}/enroll', [CourseController::class, 'enroll']); // update course
-    Route::put('/courses/{id}/unenroll', [CourseController::class, 'unenroll']); // update course
-    Route::get('/courses/{id}/is_enrolled', [CourseController::class, 'isEnrolled']); // update course
+    // Instructor
+    Route::post('/instructors/create-course', [CourseController::class, 'store']); // create course
+    Route::put('/instructors/update-course/{id}', [CourseController::class, 'update']); // update course
+    Route::delete('/instructors/delete-course/{id}', [CourseController::class, 'destroy']); // delete course
+    Route::post('/instructors/my-courses', [CourseController::class, 'myCreatedCourses']); // get my created courses
+
+    // Student
+    Route::get('/students/my-courses', [CourseController::class, 'myEnrolledCourses']); // get my enrolled courses
+    Route::put('/students/courses/{id}/enroll', [CourseController::class, 'enroll']); // student enroll course
+    Route::put('/students/courses/{id}/unenroll', [CourseController::class, 'unenroll']); // student unenroll course
+    Route::get('/students/courses/{id}/is_enrolled', [CourseController::class, 'isEnrolled']); // check if student is enrolled in a course
 
 });
