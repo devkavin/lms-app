@@ -338,7 +338,7 @@ class CourseController extends Controller
 
             $course->delete();
 
-            return APIHelper::makeApiResponse(true, 'Course Deleted', null, APIHelper::HTTP_NO_DATA_FOUND);
+            return APIHelper::makeApiResponse(true, 'Course Deleted', null, APIHelper::HTTP_CODE_SUCCESS);
         } catch (AuthorizationException $e) {
             return APIHelper::makeApiResponse(false, 'Unauthorized', null, APIHelper::HTTP_CODE_FORBIDDEN);
         } catch (ModelNotFoundException  $e) {
