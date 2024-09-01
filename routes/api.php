@@ -26,8 +26,8 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
 });
 
 // protected
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/v1/user', [AuthController::class, 'user']);
+Route::group(['prefix' => 'v1', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/user', [AuthController::class, 'user']);
 
     // Courses
     Route::get('/courses', [CourseController::class, 'index']);
