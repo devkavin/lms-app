@@ -16,7 +16,8 @@ use Illuminate\Validation\ValidationException;
 class CourseController extends Controller
 {
     /**
-     * Summary of index
+     * Get a list of all courses
+     *
      * @return \Illuminate\Http\JsonResponse
      * @throws AuthorizationException If the user is not authorized to view courses.
      * @throws \Exception If an error occurs while retrieving the courses.
@@ -39,7 +40,60 @@ class CourseController extends Controller
     }
 
     /**
-     * Summary of show
+     * Get a list of courses that the user has created
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws AuthorizationException If the user is not authorized to view their created courses.
+     * @throws \Exception If an error occurs while retrieving the user's created courses.
+     */
+    public function myCreatedCourses(): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            Gate::authorize('viewAny', Course::class);
+
+            $courses = $user->createdCourses()->orderBy("id", "desc")->paginate(10); // latest courses first
+
+            $coursesResource = CourseResource::collection($courses); // use CourseResource to format the response and return it as a JSON collection
+
+            return APIHelper::makeApiResponse(true, 'Courses retrieved successfully', $coursesResource, APIHelper::HTTP_CODE_SUCCESS);
+        } catch (AuthorizationException $e) {
+            return APIHelper::makeApiResponse(false, 'Unauthorized', null, APIHelper::HTTP_CODE_FORBIDDEN);
+        } catch (\Exception $e) {
+            return APIHelper::makeApiResponse(false, $e->getMessage(), null, APIHelper::HTTP_CODE_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Get a list of courses that the user is enrolled in
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws AuthorizationException If the user is not authorized to view their enrolled courses.
+     * @throws \Exception If an error occurs while retrieving the user's enrolled courses.
+     */
+    public function myEnrolledCourses(): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            Gate::authorize('viewAny', Course::class);
+
+            $courses = $user->enrolledCourses()->orderBy("id", "desc")->paginate(10); // latest courses first
+
+            $coursesResource = CourseResource::collection($courses); // use CourseResource to format the response and return it as a JSON collection
+
+            return APIHelper::makeApiResponse(true, 'Courses retrieved successfully', $coursesResource, APIHelper::HTTP_CODE_SUCCESS);
+        } catch (AuthorizationException $e) {
+            return APIHelper::makeApiResponse(false, 'Unauthorized', null, APIHelper::HTTP_CODE_FORBIDDEN);
+        } catch (\Exception $e) {
+            return APIHelper::makeApiResponse(false, $e->getMessage(), null, APIHelper::HTTP_CODE_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Get course details by ID
+     *
      * @param mixed $id
      * @return \Illuminate\Http\JsonResponse
      * @throws ModelNotFoundException If the course is not found.
@@ -70,7 +124,8 @@ class CourseController extends Controller
     }
 
     /**
-     * Summary of store
+     * Create a new course
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws AuthorizationException If the user is not authorized to create a course.
@@ -79,6 +134,7 @@ class CourseController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+
         try {
             $user = Auth::user();
             Gate::authorize('create', Course::class); // check if user has permission to create a course
@@ -122,7 +178,8 @@ class CourseController extends Controller
     }
 
     /**
-     * Summary of update
+     * Update a course
+     *
      * @param \Illuminate\Http\Request $request
      * @param mixed $id
      * @return \Illuminate\Http\JsonResponse
@@ -168,7 +225,8 @@ class CourseController extends Controller
 
 
     /**
-     * Summary of enroll
+     * Enroll a user in a course
+     *
      * @param mixed $id
      * @var \App\Models\User $user
      * @return \Illuminate\Http\JsonResponse
@@ -201,7 +259,8 @@ class CourseController extends Controller
     }
 
     /**
-     * Summary of unenroll
+     * Unenroll a user from a course
+     *
      * @param mixed $id
      * @return \Illuminate\Http\JsonResponse
      * @throws AuthorizationException If the user is not authorized to unenroll from the course.
@@ -234,7 +293,8 @@ class CourseController extends Controller
     }
 
     /**
-     * Summary of isEnrolled
+     * Check if a user is enrolled in a course
+     *
      * @param mixed $id
      * @return \Illuminate\Http\JsonResponse
      * @throws ModelNotFoundException If the course is not found.
@@ -258,7 +318,8 @@ class CourseController extends Controller
     }
 
     /**
-     * Summary of destroy
+     * Delete a course
+     *
      * @param mixed $id
      * @return \Illuminate\Http\JsonResponse
      * @throws AuthorizationException If the user is not authorized to delete the course.
