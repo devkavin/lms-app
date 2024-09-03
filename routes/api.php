@@ -12,17 +12,19 @@ use Illuminate\Support\Facades\Route;
 
 
 // public
-Route::post('/v1/register', [AuthController::class, 'register']);
-Route::post('/v1/login', [AuthController::class, 'login']);
-Route::post('/v1/logout', [AuthController::class, 'logout']);
+Route::prefix('v1')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 // admin
-Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
-    Route::get('/v1/admin/users', [AdminController::class, 'viewAllUsers']);
-    Route::get('/v1/admin/instructors', [AdminController::class, 'viewAllInstructors']);
-    Route::get('/v1/admin/admins', [AdminController::class, 'viewAllAdmins']);
-    Route::delete('/v1/admin/user', [AdminController::class, 'deleteUser']);
-    Route::delete('/v1/admin/bulk_delete_users', [AdminController::class, 'bulkDeleteUsers']);
+Route::group(['prefix' => 'v1', 'middleware' => ['auth:sanctum', 'role:admin']], function () {
+    Route::get('/admin/users', [AdminController::class, 'viewAllUsers']);
+    Route::get('/admin/instructors', [AdminController::class, 'viewAllInstructors']);
+    Route::get('/admin/admins', [AdminController::class, 'viewAllAdmins']);
+    Route::delete('/admin/user', [AdminController::class, 'deleteUser']);
+    Route::delete('/admin/bulk_delete_users', [AdminController::class, 'bulkDeleteUsers']);
 });
 
 // protected
