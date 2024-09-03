@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Helpers\APIHelper;
 use App\Http\Requests\ViewInstructorsRequest;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\InstructorResource;
 use App\Http\Resources\StudentResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -16,12 +19,18 @@ class AdminController extends Controller
      * View all users
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception if an error occurred while fetching users
      */
-    public function viewAllUsers()
+    public function viewAllUsers(Request $request): JsonResponse
     {
-        return response()->json([
-            'users' => User::all()
-        ], 200);
+        try {
+            $filterByRole = $request->query('role');
+            // Filter query
+            $filterByRole ? $users = User::role($filterByRole)->paginate(10) : $users = User::paginate(10);
+            return APIHelper::makeApiResponse(true, 'Users fetched successfully', $users, APIHelper::HTTP_CODE_SUCCESS);
+        } catch (\Exception $e) {
+            return APIHelper::makeApiResponse(false, 'Error occurred while fetching users', $e->getMessage(), APIHelper::HTTP_CODE_SERVER_ERROR);
+        }
     }
 
     /**
