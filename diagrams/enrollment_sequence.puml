@@ -1,0 +1,14 @@
+@startuml
+actor Student
+Student -> MobileApp : Select course
+MobileApp -> BackendAPI : Fetch course details
+BackendAPI -> Database : Retrieve course data
+Database -> BackendAPI : Return course data
+BackendAPI -> MobileApp : Return course details
+Student -> MobileApp : Enroll in course
+MobileApp -> BackendAPI : Submit enrollment request
+BackendAPI -> Database : Store enrollment data
+BackendAPI -> MobileApp : Confirm enrollment
+MobileApp -> Student : Display confirmation
+
+@enduml
